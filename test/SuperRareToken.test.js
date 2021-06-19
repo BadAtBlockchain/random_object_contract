@@ -24,6 +24,7 @@ contract('SuperRareToken', (accounts) => {
       var args = result.logs[0].args;
       console.log("Total Supply: " + args.totalTokens.toNumber());
       console.log("Available Tokens: " + args.availableTokens.toNumber());
+      console.log("Total minted: " + args.totalMinted.toNumber());
       console.log("Random Index: " + args.randomIndex.toNumber());
       console.log("");
     }
