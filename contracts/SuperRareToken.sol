@@ -84,7 +84,11 @@ contract SuperRareToken {
     // note, this will probably look horrible
     function balanceOf(address _address) public view returns (uint8) {
         require(_address != address(0), "Cannot check balance of 0x0");
-        
+
+        return _balanceOf(_address);
+    }
+
+    function _balanceOf(address _address) private view returns (uint8) {
         uint8 total = 0;
 
         for (uint8 i = 0; i < supply; i++) {
@@ -96,5 +100,34 @@ contract SuperRareToken {
         }
 
         return total;
+    }
+
+    function inventory(address _address) public view returns (uint8[] memory) {
+        require(_address != address(0), "Cannot get inventory of 0x0");
+        
+        uint8 bal = _balanceOf(_address);
+        uint8[] memory tokens = new uint8[](bal);
+
+        if (bal > 0) {
+            uint8 ticker = 0;
+
+            // seems weird to loop here again although we already did in _balanceOf, change?
+            for (uint8 i = 0; i < supply; i++) {
+                if (owners[i] == _address) {
+                    tokens[ticker] = i;
+                    ticker++;
+                }
+            }
+            return tokens;
+        } else {
+            return tokens;
+        }
+    }
+
+    function tokenDataUrl(uint _tokenId) public view returns (string memory) {
+        require(_tokenId < supply, "Token is not with mintable range");
+        require(owners[_tokenId] != address(0), "Token has not been minted");
+
+        return allTokens[_tokenId].URL;
     }
 }
